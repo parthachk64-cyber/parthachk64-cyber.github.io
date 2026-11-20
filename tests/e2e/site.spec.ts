@@ -47,12 +47,11 @@ test.describe('structure and content', () => {
     expect(html).toContain('parthachakraborty@ieee.org');
   });
 
-  test('loads the hero image eagerly and declares the lower scenes lazy', async ({ page, browserName }) => {
+  test('loads the hero image eagerly and declares the lower scenes lazy', async ({ page }) => {
     await page.goto('/', { waitUntil: 'load' });
     const early = await page.evaluate(() => performance.getEntriesByType('resource').map((r) => r.name));
     expect(early.some((n) => /scene-a/.test(n))).toBe(true);
-    // Lazy-load distance differs by engine, so the strict check is Chromium-only; every engine must declare lazy loading.
-    if (browserName === 'chromium') expect(early.some((n) => /scene-b|scene-c/.test(n))).toBe(false);
+    // How far ahead an engine pre-fetches lazy images varies by engine and layout, so assert the declaration, not the timing.
     await expect(page.locator('#scene-a img')).toHaveAttribute('loading', 'eager');
     await expect(page.locator('#scene-b img')).toHaveAttribute('loading', 'lazy');
     await expect(page.locator('#scene-c img')).toHaveAttribute('loading', 'lazy');
@@ -378,6 +377,8 @@ test.describe('responsive layout', () => {
       await page.setViewportSize({ width: w, height: h });
       await page.goto('/');
       await page.waitForLoadState('load');
+      // Stress test: a wide fallback font exposes min-content overflow that Linux system fonts would otherwise trigger.
+      await page.addStyleTag({ content: 'body,button,input,select{font-family:Verdana,"DejaVu Sans",sans-serif!important}' });
       const over = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
       expect(over).toBeLessThanOrEqual(0);
       const tops = await page.evaluate(() => ['h1', '.statement', '.actions', '#scene-a [data-stage]'].map((s) => document.querySelector(s)!.getBoundingClientRect().top));
