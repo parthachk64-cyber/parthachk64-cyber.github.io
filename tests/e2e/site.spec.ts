@@ -8,7 +8,13 @@ const TOTAL = publications.length;
 
 function watchConsole(page: Page): string[] {
   const bad: string[] = [];
-  page.on('console', (m) => { if (m.type() === 'error' || m.type() === 'warning') bad.push(`${m.type()}: ${m.text()}`); });
+  page.on('console', (m) => {
+    // Driver notice caused by the test harness reading pixels back for screenshots, not by the page.
+    if (/GPU stall due to ReadPixels/.test(m.text())) return;
+    // Intended: a plate that scrolls far away releases its GPU context explicitly (Firefox logs this).
+    if (/WebGL context was lost/.test(m.text())) return;
+    if (m.type() === 'error' || m.type() === 'warning') bad.push(`${m.type()}: ${m.text()}`);
+  });
   page.on('pageerror', (e) => bad.push(`pageerror: ${e.message}`));
   return bad;
 }
@@ -137,20 +143,20 @@ test.describe('hotspot selection', () => {
 test.describe('depth and hit testing', () => {
   test.skip(({ isMobile }) => isMobile, 'fine pointer only');
 
-  test('tilts only inside the artwork, stays within a few degrees and settles to neutral', async ({ page }) => {
+  test('the 3D camera orbits only while the pointer is inside the artwork and settles back', async ({ page }) => {
     await page.goto('/');
     const stage = page.locator('#scene-a [data-stage]');
+    await expect(stage).toHaveAttribute('data-gl', 'ready', { timeout: 20000 });
+    const yaw = async () => Number(await stage.getAttribute('data-yaw'));
     const box = (await stage.boundingBox())!;
-    const read = () => page.locator('#scene-a [data-plane]').evaluate((e) => getComputedStyle(e).transform);
     await page.mouse.move(box.x - 40, box.y + 20);
-    expect(await read()).toMatch(/^none$|^matrix\(1, 0, 0, 1, 0, 0\)$|^matrix3d\(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1\)$/);
-    await page.mouse.move(box.x + box.width - 6, box.y + 6, { steps: 8 });
-    await expect.poll(read).not.toMatch(/^none$|^matrix\(1, 0, 0, 1, 0, 0\)$|^matrix3d\(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1\)$/);
-    const ry = parseFloat(await page.locator('#scene-a [data-stage]').evaluate((e) => e.style.getPropertyValue('--ry')));
-    expect(Math.abs(ry)).toBeGreaterThan(0.3);
-    expect(Math.abs(ry)).toBeLessThanOrEqual(3.01);
+    await page.waitForTimeout(300);
+    expect(Math.abs(await yaw())).toBeLessThan(0.005);
+    await page.mouse.move(box.x + box.width - 6, box.y + box.height / 2, { steps: 8 });
+    await expect.poll(async () => Math.abs(await yaw()), { timeout: 8000 }).toBeGreaterThan(0.08);
+    expect(Math.abs(await yaw())).toBeLessThanOrEqual(0.221);
     await page.mouse.move(box.x - 60, box.y - 60, { steps: 4 });
-    await expect.poll(async () => Math.abs(parseFloat(await stage.evaluate((e) => e.style.getPropertyValue('--ry'))))).toBeLessThan(0.02);
+    await expect.poll(async () => Math.abs(await yaw()), { timeout: 10000 }).toBeLessThan(0.005);
   });
 
   test('a point still receives the click while the plane is tilted', async ({ page }) => {
@@ -182,6 +188,48 @@ test.describe('depth and hit testing', () => {
   });
 });
 
+test.describe('webgl scenes', () => {
+  test('each plate renders a live, non-blank 3D scene', async ({ page }) => {
+    const bad = watchConsole(page);
+    await page.goto('/');
+    for (const s of scenes) {
+      const stage = page.locator(`#scene-${s.id} [data-stage]`);
+      await stage.scrollIntoViewIfNeeded();
+      await expect(stage).toHaveAttribute('data-gl', 'ready', { timeout: 20000 });
+      await expect(stage.locator('canvas.gl')).toHaveCount(1);
+      await expect.poll(async () => Number(await stage.getAttribute('data-frames')), { timeout: 10000 }).toBeGreaterThan(15);
+      const f1 = Number(await stage.getAttribute('data-frames'));
+      await expect.poll(async () => Number(await stage.getAttribute('data-frames')), { timeout: 10000 }).toBeGreaterThan(f1);
+      const png = await stage.locator('canvas.gl').screenshot();
+      expect(png.byteLength).toBeGreaterThan(30000);
+    }
+    expect(bad).toEqual([]);
+  });
+
+  test('keeps at most two WebGL contexts and releases them away from the plates', async ({ page }) => {
+    await page.goto('/');
+    await expect(page.locator('#scene-a [data-stage]')).toHaveAttribute('data-gl', 'ready', { timeout: 20000 });
+    expect(await page.locator('canvas.gl').count()).toBeLessThanOrEqual(2);
+    await page.locator('#scene-c [data-stage]').scrollIntoViewIfNeeded();
+    await expect(page.locator('#scene-c [data-stage]')).toHaveAttribute('data-gl', 'ready', { timeout: 20000 });
+    expect(await page.locator('canvas.gl').count()).toBeLessThanOrEqual(2);
+    await page.locator('#contact').scrollIntoViewIfNeeded();
+    await expect.poll(() => page.locator('canvas.gl').count(), { timeout: 8000 }).toBe(0);
+  });
+
+  test('selecting a point runs a 3D pulse along its route', async ({ page, isMobile }) => {
+    test.skip(isMobile, 'desktop');
+    await page.goto('/');
+    const stage = page.locator('#scene-b [data-stage]');
+    await stage.scrollIntoViewIfNeeded();
+    await expect(stage).toHaveAttribute('data-gl', 'ready', { timeout: 20000 });
+    await page.waitForTimeout(1600);
+    await hotspot(page, 'b4').click();
+    await expect(stage).toHaveAttribute('data-pulse', 'b4');
+    await expect(stage).not.toHaveAttribute('data-pulse', /.+/, { timeout: 6000 });
+  });
+});
+
 test.describe('touch', () => {
   test.skip(({ isMobile }) => !isMobile, 'touch projects only');
 
@@ -193,13 +241,16 @@ test.describe('touch', () => {
         for (const m of ms) {
           const t = m.target as Element;
           if (t.classList?.contains('is-pulsing')) seen.add(`${t.closest('[data-scene]')?.getAttribute('data-scene')}:${t.getAttribute('data-pt')}`);
+          const p3 = t.getAttribute?.('data-pulse');
+          if (p3) seen.add(`3d:${t.closest('[data-scene]')?.getAttribute('data-scene')}:${p3}`);
         }
-      }).observe(document, { subtree: true, attributes: true, attributeFilter: ['class'] });
+      }).observe(document, { subtree: true, attributes: true, attributeFilter: ['class', 'data-pulse'] });
     });
     await page.goto('/');
     for (const s of scenes) {
       await page.locator(`#scene-${s.id} [data-stage]`).scrollIntoViewIfNeeded();
       await expect.poll(() => page.evaluate((k) => (window as unknown as { __pulsed: Set<string> }).__pulsed.has(k), `${s.id}:${s.defaultPoint}`), { timeout: 6000 }).toBe(true);
+      await expect.poll(() => page.evaluate((k) => (window as unknown as { __pulsed: Set<string> }).__pulsed.has(k), `3d:${s.id}:${s.defaultPoint}`), { timeout: 20000 }).toBe(true);
     }
   });
 
@@ -318,6 +369,11 @@ test.describe('motion and resilience', () => {
       expect(await page.locator('#scene-a .trace[data-pt="a2"] .trace__line').evaluate((e) => getComputedStyle(e).opacity)).toBe('0.95');
       const anim = await page.locator('#scene-a .trace--ambient .trace__pulse').evaluate((e) => getComputedStyle(e).animationName);
       expect(anim).toBe('none');
+      const stage = page.locator('#scene-a [data-stage]');
+      await expect(stage).toHaveAttribute('data-gl', 'ready', { timeout: 20000 });
+      const f1 = await stage.getAttribute('data-frames');
+      await page.waitForTimeout(1200);
+      expect(await stage.getAttribute('data-frames')).toBe(f1);
       await toggle.click();
       await expect(page.locator('html')).toHaveAttribute('data-motion', 'on');
       await page.reload();
@@ -335,6 +391,7 @@ test.describe('motion and resilience', () => {
     await page.mouse.move(box.x + box.width - 5, box.y + 5, { steps: 6 });
     await page.waitForTimeout(400);
     expect(await page.locator('#scene-a [data-plane]').evaluate((e) => getComputedStyle(e).transform)).toBe('none');
+    expect(Math.abs(Number((await page.locator('#scene-a [data-stage]').getAttribute('data-yaw')) ?? 0))).toBeLessThan(0.005);
     await page.reload();
     await expect(page.locator('html')).toHaveAttribute('data-motion', 'off');
   });

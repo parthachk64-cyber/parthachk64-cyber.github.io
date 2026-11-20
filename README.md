@@ -1,6 +1,6 @@
 # Partha Chakraborty — research portfolio
 
-Interactive research portfolio: AI for cybersecurity. Static [Astro](https://astro.build) site, TypeScript, plain CSS and one small client module. No database, no runtime API calls, no keys.
+Interactive research portfolio: AI for cybersecurity. Static [Astro](https://astro.build) site, TypeScript, plain CSS, and real-time WebGL scenes built with [three.js](https://threejs.org). No database, no runtime API calls, no keys.
 
 **Live site:** https://parthachk64-cyber.github.io/
 
@@ -10,7 +10,12 @@ The animated scenes, filters and deep links run on the hosted site. This image i
 
 ## What is on the page
 
-- Three illustrated scenes, each with four hotspot papers (12 featured papers). Hotspots are real buttons with a matching text index; hover or focus previews a topic, click, tap, Enter or Space commits it.
+- Three real-time 3D scenes, each with four hotspot papers (12 featured papers):
+  - **Plate A**: an AI agent breaking out of a glass sandbox of spilling sand, streaming data to server racks and a database.
+  - **Plate B**: a robotic fingertip touching a lattice shield inside an orbit of network nodes (cloud, IIoT cluster, 6G antenna).
+  - **Plate C**: a padlock on a live circuit board with travelling signals and two holographic AI clouds.
+- The camera orbits with the pointer inside a plate; selecting a point sends a pulse along its 3D route. Hotspots are real HTML buttons projected from 3D anchors, with a matching text index, so keyboard, screen-reader and touch use do not depend on the canvas.
+- Each scene is built only when it nears the viewport and disposed when it leaves (at most two WebGL contexts), pauses offscreen and in hidden tabs, and lowers its own quality if frames run slow. Reduced motion shows a still 3D frame. Without JavaScript or WebGL, the original illustrations are shown instead.
 - A searchable bibliography with topic and year filters, newest first, deep links (`#pub-<id>`, `#featured-<id>`, `?q=&topic=&year=`) and a no-JavaScript static list.
 - Google Scholar snapshot, about, service and contact.
 
@@ -31,12 +36,15 @@ npm run e2e:chromium # chromium only (what CI runs)
 
 First time only: `npx playwright install chromium firefox webkit`.
 
+The end-to-end tests render WebGL. On Windows they use the real GPU; on GPU-less machines (CI) browsers fall back to software rendering, which is slow, so CI runs one worker with longer timeouts. Running several engines at once on one laptop can cause timeouts that disappear when run per engine.
+
 ## Updating content (the files you edit)
 
 | What | File |
 | --- | --- |
 | Publications | `src/data/publications.json` |
-| Which papers sit on which hotspot, anchor positions, trace lines | `src/data/scenes.ts` |
+| Which papers sit on which hotspot (and 2D poster anchors) | `src/data/scenes.ts` |
+| 3D scenes, their hotspot anchors and pulse routes | `src/three/sceneA.ts`, `sceneB.ts`, `sceneC.ts` (`anchors` and `routes` at the bottom of each) |
 | Google Scholar snapshot | `src/data/snapshot.ts` |
 | Name, statement, links, education, service, email | `src/data/profile.ts` |
 
@@ -50,7 +58,11 @@ Verify metadata against the publisher or Crossref (`https://api.crossref.org/wor
 
 Edit the three numbers and the label in `src/data/snapshot.ts`. The catalogue count on the page is derived from the records and is separate.
 
-### Move a hotspot or a trace
+### Move a 3D hotspot
+
+Each `src/three/scene*.ts` returns `anchors` (world positions of the four points) and `routes` (the curve a selection pulse travels). Move an anchor and its button follows automatically, since buttons are projected from the 3D position every frame.
+
+### Move a poster hotspot or trace (no-WebGL fallback)
 
 In `src/data/scenes.ts`, `x` and `y` are percentages of the uncropped image from the top left. `trace` is a list of `[x, y]` percentage points drawn over the artwork. To check alignment, run `npm run dev`, open the DevTools console and run:
 

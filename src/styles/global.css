@@ -81,8 +81,8 @@ p { margin: 0 0 1rem; }
 .scene--hero .scene__art { grid-area: art; }
 .scene--hero .scene__read { grid-area: read; display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 0 clamp(1.25rem, 3vw, 2.5rem); align-items: start; margin-top: clamp(1rem, 3vw, 2.5rem); }
 .scene--hero .scene__read > .kicker, .scene--hero .scene__read > .scene__q { grid-column: 1 / -1; }
-.scene--split { grid-template-columns: minmax(0, 640px) minmax(0, 1fr); align-items: start; }
-.scene--plate { grid-template-columns: minmax(0, 576px) minmax(0, 1fr); align-items: start; }
+.scene--split { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); align-items: start; }
+.scene--plate { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); align-items: start; }
 @media (max-width: 959px) {
   .scene--hero { grid-template-columns: minmax(0, 1fr); grid-template-areas: 'lead' 'art' 'read'; }
   .scene--hero .scene__read { grid-template-columns: minmax(0, 1fr); }
@@ -90,17 +90,27 @@ p { margin: 0 0 1rem; }
 }
 .scene > *, .scene__read > *, .about__grid > * { min-width: 0; }
 .scene__q { font-size: clamp(1.4rem, 2.4vw, 1.85rem); margin-bottom: 1rem; }
-.scene__art { margin: 0; }
+.scene__art { margin: 0; overflow: clip; overflow-clip-margin: 14px; }
 .scene__art figcaption { font-size: 0.85rem; color: var(--muted); margin-top: 0.6rem; }
 .scene--plate .scene__art .stage { box-shadow: 0 0 0 1px rgba(242, 163, 58, 0.45); }
 
 /* Stage, plane and layers (2.5D) */
-.stage { position: relative; width: 100%; max-width: calc(var(--w) * 1px); aspect-ratio: var(--w) / var(--h); perspective: 1100px; background: var(--bg-2); border-radius: 4px; }
+.stage { position: relative; width: 100%; aspect-ratio: var(--w) / var(--h); perspective: 1100px; background: var(--bg-2); border-radius: 4px; }
 .plane { position: absolute; inset: 0; transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)); will-change: transform; }
 .art { display: block; width: 100%; height: 100%; border-radius: 4px; object-fit: cover; color: var(--muted); font-size: 0.8rem; }
 .traces, .hotspots { position: absolute; inset: 0; transform: translate(calc(var(--nx, 0) * var(--shift, 0px)), calc(var(--ny, 0) * var(--shift, 0px))); }
 .traces { width: 100%; height: 100%; pointer-events: none; overflow: visible; }
 .light { position: absolute; inset: 0; pointer-events: none; border-radius: 4px; mix-blend-mode: screen; background: radial-gradient(circle at calc(50% + var(--nx, 0) * 28%) calc(50% + var(--ny, 0) * 28%), rgba(120, 220, 255, 0.14), transparent 48%); transform: translate(calc(var(--nx, 0) * 8px), calc(var(--ny, 0) * 8px)); }
+
+/* WebGL stage */
+.gl { position: absolute; inset: 0; width: 100%; height: 100%; display: block; border-radius: 4px; animation: gl-in 0.6s ease-out; }
+@keyframes gl-in { from { opacity: 0; } to { opacity: 1; } }
+.stage[data-gl='ready'] .art, .stage[data-gl='ready'] .traces, .stage[data-gl='ready'] .light { visibility: hidden; }
+.stage[data-gl='ready'] { box-shadow: 0 30px 80px -40px rgba(56, 214, 255, 0.45), 0 0 0 1px rgba(56, 214, 255, 0.18); }
+.stage[data-gl='ready'] .hotspot__dot { inset: 15px; background: rgba(7, 13, 28, 0.35); border: 2px solid var(--cyan); }
+.stage[data-gl='ready'] .hotspot[aria-pressed='true'] .hotspot__dot { background: var(--amber); border-color: #fff; }
+.stage[data-gl='ready'] .hotspot__num { color: #fff; }
+.stage[data-gl='ready'] .hotspot[aria-pressed='true'] .hotspot__num { color: #04101f; }
 
 /* Traces */
 .trace__line, .trace__pulse, .trace__lead, .ring { fill: none; stroke-linecap: round; stroke-linejoin: round; }

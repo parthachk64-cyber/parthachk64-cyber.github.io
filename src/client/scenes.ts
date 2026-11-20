@@ -1,6 +1,18 @@
-// Scene interaction: selection, trace preview and pulses, 2.5D tilt, compact mode.
+// Scene interaction: selection, previews, pulses, compact mode, and the WebGL stage lifecycle.
+import type { Engine } from '../three/engine';
 
 const MAX_TILT_DEG = 3;
+const MAX_LIVE_GL = 2;
+
+interface LiveStage { distance(): number; release(): void }
+const liveStages = new Set<LiveStage>();
+function makeRoom(self: LiveStage): void {
+  while (liveStages.size >= MAX_LIVE_GL) {
+    const far = [...liveStages].filter((s) => s !== self).sort((a, b) => b.distance() - a.distance())[0];
+    if (!far) return;
+    far.release();
+  }
+}
 const TRACE_SHIFT_PX = 3;
 const COMPACT_BELOW_PX = 480;
 const EASE = 0.14;
@@ -47,11 +59,15 @@ export function initScene(el: HTMLElement): SceneApi {
     items.forEach((i) => i.setAttribute('aria-pressed', String(open && i.dataset.pt === current)));
     traces.forEach((t) => t.classList.toggle('is-active', open && t.dataset.pt === current));
     closeBtns.forEach((b) => { b.hidden = !open; });
+    engine?.setSelected(open ? current : null);
     if (open) el.dataset.committed = '1'; else delete el.dataset.committed;
   }
 
+  let engine: Engine | null = null;
+
   function pulse(pt: string): void {
     if (!motionOn()) return;
+    engine?.pulse(pt);
     const t = trace(pt);
     if (!t) return;
     t.classList.remove('is-pulsing');
@@ -63,6 +79,7 @@ export function initScene(el: HTMLElement): SceneApi {
   function preview(pt: string | null): void {
     traces.forEach((t) => t.classList.toggle('is-preview', pt !== null && t.dataset.pt === pt));
     items.forEach((i) => i.classList.toggle('is-preview', pt !== null && i.dataset.pt === pt));
+    engine?.setPreview(pt);
   }
 
   function ensureTitleVisible(): void {
@@ -128,10 +145,13 @@ export function initScene(el: HTMLElement): SceneApi {
 
   // Visibility: pause offscreen, play an entrance pulse the first time the plate is seen.
   let entered = false;
+  let visible = false;
   const io = new IntersectionObserver(
     (entries) => {
       for (const en of entries) {
+        visible = en.isIntersecting;
         el.classList.toggle('is-visible', en.isIntersecting);
+        engine?.setActive(en.isIntersecting);
         if (en.isIntersecting && !entered) {
           entered = true;
           window.setTimeout(() => { pulse(defaultPt); if (!trace(defaultPt)?.querySelector('.trace__pulse')) trace(defaultPt)?.classList.add('is-pulsing'); }, 250);
@@ -147,6 +167,53 @@ export function initScene(el: HTMLElement): SceneApi {
   if (stage) {
     initCompact(el, stage, hotspots);
     initTilt(stage);
+    // WebGL lifecycle: build the 3D stage when the plate comes near, dispose it when it leaves,
+    // so at most two contexts exist at once. The poster image stays underneath as the fallback.
+    const host = el.querySelector<HTMLElement>('[data-plane]');
+    let near = false;
+    let loading = false;
+    const mount = async (): Promise<void> => {
+      if (engine || loading || !host) return;
+      loading = true;
+      try {
+        const mod = await import('../three/engine');
+        if (!mod.supportsWebGL()) { stage.dataset.gl = 'unsupported'; return; }
+        if (!near || engine) return;
+        makeRoom(live);
+        engine = mod.createEngine({ sceneId: id, stage, host, hotspots, motion: motionOn });
+        liveStages.add(live);
+        engine.setSelected(open ? current : null);
+        engine.setActive(visible);
+        if (visible && !open) engine.pulse(current);
+      } catch {
+        stage.dataset.gl = 'failed';
+        engine = null;
+      } finally {
+        loading = false;
+      }
+    };
+    const release = (): void => {
+      liveStages.delete(live);
+      if (engine) { engine.dispose(); engine = null; }
+    };
+    const live: LiveStage = {
+      distance: () => { const r = stage.getBoundingClientRect(); return Math.abs(r.top + r.height / 2 - window.innerHeight / 2); },
+      release: () => { near = false; release(); },
+    };
+    // Hysteresis: build within 450px of the viewport, release only beyond 1400px.
+    const nearIo = new IntersectionObserver((entries) => {
+      for (const en of entries) if (en.isIntersecting) { near = true; void mount(); }
+    }, { rootMargin: '450px 0px' });
+    const farIo = new IntersectionObserver((entries) => {
+      for (const en of entries) {
+        if (en.isIntersecting) continue;
+        near = false;
+        release();
+      }
+    }, { rootMargin: '1400px 0px' });
+    nearIo.observe(stage);
+    farIo.observe(stage);
+    window.addEventListener('motionchange', () => engine?.refresh());
   }
 
   return {
@@ -199,7 +266,7 @@ function initTilt(stage: HTMLElement): void {
 
   stage.addEventListener('pointermove', (e) => {
     if (e.pointerType === 'touch' || !fine.matches || frozen) return;
-    if (!motionOn()) { reset(); return; }
+    if (!motionOn() || stage.dataset.gl === 'ready') { reset(); return; }
     const r = stage.getBoundingClientRect(); // stationary wrapper: never transformed
     tx = Math.max(-1, Math.min(1, ((e.clientX - r.left) / r.width) * 2 - 1));
     ty = Math.max(-1, Math.min(1, ((e.clientY - r.top) / r.height) * 2 - 1));
