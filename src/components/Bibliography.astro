@@ -1,0 +1,83 @@
+---
+import { TAGS, doiUrl, searchText, sortNewestFirst, topicCounts, yearsOf, safeUrl, type Publication } from '../lib/catalogue';
+import type { ResolvedScene } from '../lib/scenes';
+
+interface Props {
+  pubs: Publication[];
+  scenes: ResolvedScene[];
+}
+const { pubs, scenes } = Astro.props;
+const list = sortNewestFirst(pubs);
+const years = yearsOf(list);
+const topics = topicCounts(list);
+const featured = new Map<string, { scene: string; kicker: string; label: string }>();
+for (const s of scenes) for (const p of s.points) featured.set(p.id, { scene: s.id, kicker: s.kicker, label: p.label });
+const tagLabel = (id: string) => TAGS.find((t) => t.id === id)?.label ?? id;
+---
+<section class="bib" id="publications" aria-labelledby="h-pubs">
+  <div class="wrap">
+    <p class="kicker kicker--ink">Publications</p>
+    <h2 id="h-pubs">Bibliography</h2>
+    <p class="lede">
+      <strong data-total>{list.length}</strong> records in this catalogue, derived from the list below. Each was matched to a publisher,
+      repository or ORCID record; the source is stated on every entry.
+    </p>
+
+    <form class="filters" role="search" aria-label="Filter publications" data-filters novalidate>
+      <label class="field field--grow">
+        <span>Search title, venue, author or topic</span>
+        <input type="search" name="q" autocomplete="off" spellcheck="false" maxlength="120" />
+      </label>
+      <label class="field">
+        <span>Topic</span>
+        <select name="topic">
+          <option value="">All topics</option>
+          {topics.map((t) => <option value={t.id}>{t.label} ({t.count})</option>)}
+        </select>
+      </label>
+      <label class="field">
+        <span>Year</span>
+        <select name="year">
+          <option value="">All years</option>
+          {years.map((y) => <option value={String(y)}>{y}</option>)}
+        </select>
+      </label>
+      <button type="button" class="btn btn--ghost" data-clear>Clear filters</button>
+    </form>
+    <p class="status" role="status" aria-live="polite" data-status>Showing {list.length} of {list.length} records, newest first.</p>
+
+    <div class="empty" data-empty hidden>
+      <p><strong>No publications match these filters.</strong></p>
+      <p>Try fewer words, a different topic or year, or clear the filters to see all {list.length} records.</p>
+      <button type="button" class="btn" data-clear>Clear filters</button>
+    </div>
+
+    <ol class="pubs" data-list>
+      {list.map((p) => {
+        const doi = doiUrl(p.doi);
+        const f = featured.get(p.id);
+        const src = p.sourceUrl && safeUrl(p.sourceUrl);
+        return (
+          <li class="pub" id={`pub-${p.id}`} data-id={p.id} data-year={p.year} data-tags={p.tags.join(' ')} data-text={searchText(p)}>
+            <p class="pub__meta">
+              <span class="pub__year">{p.year}</span> · {p.workType}
+              {f && <> · <a href={`#featured-${p.id}`} data-feature-link={p.id}>Featured, {f.kicker}: {f.label}</a></>}
+            </p>
+            <h3 class="pub__title"><a href={`#pub-${p.id}`}>{p.title}</a></h3>
+            <p class="pub__venue">{p.venue}</p>
+            <p class="pub__authors">{p.authors.join(', ')}</p>
+            <ul class="tags" aria-label="Record topics">{p.tags.map((t) => <li>{tagLabel(t)}</li>)}</ul>
+            <p class="pub__links">
+              {doi && <a href={doi} target="_blank" rel="noopener noreferrer">Open DOI {p.doi}<span class="sr"> (opens in a new tab)</span></a>}
+              {!doi && src && <a href={src} target="_blank" rel="noopener noreferrer">Open the ORCID record<span class="sr"> (opens in a new tab)</span></a>}
+              {p.altVersions.map((v) => (
+                <a href={`https://doi.org/${v.doi}`} target="_blank" rel="noopener noreferrer">{v.label}: DOI {v.doi}<span class="sr"> (opens in a new tab)</span></a>
+              ))}
+            </p>
+            <p class="pub__prov">Source: {p.sourceName}. Authors: {p.authorsSource}.{p.note ? ` ${p.note}` : ''}{doi ? '' : ' No DOI recorded.'}</p>
+          </li>
+        );
+      })}
+    </ol>
+  </div>
+</section>

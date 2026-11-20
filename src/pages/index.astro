@@ -1,0 +1,135 @@
+---
+import Base from '../layouts/Base.astro';
+import Scene from '../components/Scene.astro';
+import Bibliography from '../components/Bibliography.astro';
+import publications from '../data/publications.json';
+import { scenes } from '../data/scenes';
+import { profile } from '../data/profile';
+import { snapshot } from '../data/snapshot';
+import { resolveScenes } from '../lib/scenes';
+import type { Publication } from '../lib/catalogue';
+
+const base = import.meta.env.BASE_URL;
+const pubs = publications as Publication[];
+const [a, b, c] = resolveScenes(scenes, pubs);
+const catalogueCount = pubs.length;
+---
+<Base
+  title="Partha Chakraborty | Artificial intelligence for cybersecurity"
+  description="Research portfolio of Partha Chakraborty: machine learning for threat detection, cloud security and critical infrastructure protection, with a searchable bibliography."
+  preloadHero={{ href: `${base}images/scene-a.webp`, srcset: `${base}images/scene-a-768.webp 768w, ${base}images/scene-a.webp 1536w` }}
+>
+  <header class="top">
+    <div class="wrap top__in">
+      <a class="brand" href={`${base}#top`} aria-label="Partha Chakraborty, home">Partha Chakraborty</a>
+      <button type="button" class="menu-btn" aria-expanded="false" aria-controls="site-nav" data-menu>Menu</button>
+      <nav id="site-nav" class="nav" aria-label="Primary" data-nav>
+        <a href="#research">Research</a>
+        <a href="#publications">Publications</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <button type="button" class="motion" aria-pressed="true" data-motion-toggle>
+        <span class="motion__lbl">Motion: <span data-motion-state>on</span></span>
+      </button>
+    </div>
+  </header>
+
+  <main id="main" tabindex="-1">
+    <div id="top" class="wrap hero-wrap">
+      <Scene scene={a} variant="hero" eager>
+        <Fragment slot="lead">
+          <h1 class="name">{profile.name}</h1>
+          <p class="focus-line">{profile.field}</p>
+          <p class="statement">“{profile.statement}”</p>
+          <p class="actions">
+            <a class="btn" href="#research">Explore the research</a>
+            <a class="btn btn--ghost" href="#publications">Browse publications</a>
+          </p>
+        </Fragment>
+      </Scene>
+    </div>
+
+    <div id="research" class="wrap block">
+      <div class="block__head">
+        <p class="kicker">Research explorer</p>
+        <h2 class="block__title">Where a network identifies a threat</h2>
+        <p class="lede">Select a point on the illustration, or use the text index, to open a paper. Illustrations are editorial; the lines relate topics, not data or findings.</p>
+      </div>
+      <Scene scene={b} variant="split" />
+    </div>
+
+    <div class="wrap block block--plate">
+      <div class="block__head">
+        <p class="kicker">Governance</p>
+        <h2 class="block__title">From evidence to decisions</h2>
+      </div>
+      <Scene scene={c} variant="plate" />
+      <p class="bridge"><a href="#publications">Continue to the full bibliography</a></p>
+    </div>
+
+    <Bibliography pubs={pubs} scenes={[a, b, c]} />
+
+    <section class="wrap block" id="impact" aria-labelledby="h-impact">
+      <p class="kicker">Research impact</p>
+      <h2 id="h-impact" class="block__title">{snapshot.label}</h2>
+      <table class="metrics">
+        <caption class="sr">Google Scholar metrics, all time and since 2021</caption>
+        <thead><tr><th scope="col">Metric</th><th scope="col">All</th><th scope="col">Since 2021</th></tr></thead>
+        <tbody>
+          {snapshot.rows.map((r) => <tr><th scope="row">{r.metric}</th><td>{r.all}</td><td>{r.since2021}</td></tr>)}
+        </tbody>
+      </table>
+      <p class="muted">
+        These are the owner-supplied profile figures. They are separate from this site’s catalogue, which lists {catalogueCount} records.
+        <a href={snapshot.url} target="_blank" rel="noopener noreferrer">View the Google Scholar profile<span class="sr"> (opens in a new tab)</span></a>
+      </p>
+    </section>
+
+    <section class="wrap block about" id="about" aria-labelledby="h-about">
+      <p class="kicker">About</p>
+      <h2 id="h-about" class="block__title">{profile.name}, {profile.designation}</h2>
+      <div class="about__grid">
+        <div>
+          <p class="lede">{profile.about}</p>
+          <h3>Education</h3>
+          <ul class="timeline">
+            {profile.education.map((e) => <li><strong>{e.what}</strong><span>{e.where}</span><span class="muted">{e.when}</span></li>)}
+          </ul>
+          <h3>Experience</h3>
+          <ul class="timeline">
+            {profile.experience.map((e) => <li><strong>{e.what}</strong><span>{e.where}</span><span class="muted">{e.when}</span></li>)}
+          </ul>
+        </div>
+        <div>
+          <h3>Service and recognition</h3>
+          <p class="muted">As reported by the author.</p>
+          <ul class="plain">{profile.service.map((s) => <li>{s}</li>)}</ul>
+          <h3>Review activity</h3>
+          <p class="muted">As listed on the author’s <a href={profile.links[0].href} target="_blank" rel="noopener noreferrer">ORCID record<span class="sr"> (opens in a new tab)</span></a>.</p>
+          <ul class="plain">{profile.reviewing.map((s) => <li>{s}</li>)}</ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="wrap block" id="contact" aria-labelledby="h-contact">
+      <p class="kicker">Contact</p>
+      <h2 id="h-contact" class="block__title">Get in touch</h2>
+      <p class="lede">For research collaboration, reviewing or speaking: <a href={`mailto:${profile.email}`}>{profile.email}</a></p>
+      <ul class="links">
+        {profile.links.map((l) => (
+          <li><a href={l.href} target="_blank" rel="noopener noreferrer"><strong>{l.label}</strong><span>{l.detail}</span><span class="sr"> (opens in a new tab)</span></a></li>
+        ))}
+      </ul>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <div class="wrap">
+      <p>© {new Date().getFullYear()} {profile.name}. Illustrations are decorative artwork, not photographs of the researcher.</p>
+    </div>
+  </footer>
+  <script>
+    import '../client/entry';
+  </script>
+</Base>

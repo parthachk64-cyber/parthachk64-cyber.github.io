@@ -1,0 +1,117 @@
+---
+import { primaryLink } from '../lib/catalogue';
+import type { ResolvedScene } from '../lib/scenes';
+
+interface Props {
+  scene: ResolvedScene;
+  variant: 'hero' | 'split' | 'plate';
+  eager?: boolean;
+}
+const { scene, variant, eager = false } = Astro.props;
+const base = import.meta.env.BASE_URL;
+const { width: W, height: H } = scene.image;
+const url = (p: string) => `${base}${p}`;
+const srcset = scene.image.srcset
+  ?.split(',')
+  .map((s) => {
+    const [path, w] = s.trim().split(' ');
+    return `${url(path)} ${w}`;
+  })
+  .join(', ');
+const d = (t: Array<[number, number]>) =>
+  t.map(([x, y], i) => `${i ? 'L' : 'M'}${((x * W) / 100).toFixed(1)} ${((y * H) / 100).toFixed(1)}`).join(' ');
+const def = scene.points.find((p) => p.id === scene.defaultPoint) ?? scene.points[0];
+const meta = (p: (typeof scene.points)[number]['pub']) => [String(p.year), p.workType, p.venue].join(' · ');
+const verificationText: Record<string, string> = {
+  crossref: 'Metadata matched to the publisher record via Crossref.',
+  datacite: 'Metadata matched to the DataCite / Zenodo record.',
+  'orcid-only': 'Metadata from the owner-supplied ORCID record only.',
+};
+const ambient = d([[49.5, 42.5], [56, 42], [62, 40.5], [70, 39.2], [77, 38]]);
+---
+<section class={`scene scene--${variant}`} id={`scene-${scene.id}`} data-scene={scene.id} aria-labelledby={`h-${scene.id}`}>
+  {variant === 'hero' && <div class="scene__lead"><slot name="lead" /></div>}
+  <figure class="scene__art">
+    <div class="stage" style={`--w:${W};--h:${H};`} data-stage>
+      <div class="plane" data-plane>
+        <img
+          class="art" src={url(scene.image.src)} srcset={srcset} sizes={srcset ? '(min-width: 960px) 58vw, 100vw' : undefined}
+          width={W} height={H} alt={scene.image.alt} decoding={eager ? 'auto' : 'async'}
+          loading={eager ? 'eager' : 'lazy'} fetchpriority={eager ? 'high' : undefined}
+        />
+        <svg class="traces" viewBox={`0 0 ${W} ${H}`} aria-hidden="true" focusable="false">
+          {scene.id === 'a' && (
+            <g class="trace trace--ambient">
+              <path class="trace__pulse" pathLength="1" d={ambient} />
+              <path class="trace__lead" pathLength="1" d={ambient} />
+            </g>
+          )}
+          {scene.points.map((p) => (
+            <g class="trace" data-pt={p.id}>
+              {p.trace.length > 1 && (
+                <>
+                  <path class="trace__line" d={d(p.trace)} />
+                  <path class="trace__pulse" pathLength="1" d={d(p.trace)} />
+                  <path class="trace__lead" pathLength="1" d={d(p.trace)} />
+                </>
+              )}
+              <circle class="ring" cx={(p.x * W) / 100} cy={(p.y * H) / 100} r={(Math.max(W, H) * (p.ring ?? 2)) / 100} />
+            </g>
+          ))}
+        </svg>
+        <div class="light" aria-hidden="true"></div>
+        <div class="hotspots">
+          {scene.points.map((p, i) => (
+            <button
+              type="button" class="hotspot" data-pt={p.id} data-side={p.labelSide ?? 'right'}
+              style={`left:${p.x}%;top:${p.y}%;`} aria-pressed="false" aria-controls={`panel-${scene.id}`}
+              aria-label={`${p.label} — open featured paper`}
+            >
+              <span class="hotspot__dot" aria-hidden="true"><span class="hotspot__num">{i + 1}</span></span>
+              <span class="hotspot__tip" aria-hidden="true">{p.label}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+    <figcaption>{scene.kicker} · {scene.caption}</figcaption>
+  </figure>
+
+  <div class="scene__read">
+    <p class="kicker">{scene.kicker}</p>
+    <h2 class="scene__q" id={`h-${scene.id}`}>{scene.heading}</h2>
+    <ol class="index" aria-label={`${scene.kicker} featured papers, text index`}>
+      {scene.points.map((p, i) => (
+        <li>
+          <a class={`index__item${p.id === def.id ? ' is-default' : ''}`} href={`#pub-${p.id}`} data-pt={p.id} aria-controls={`panel-${scene.id}`}>
+            <span class="index__num" aria-hidden="true">{i + 1}</span>
+            <span class="index__text"><span class="index__label">{p.label}</span><span class="index__title">{p.pub.title}</span></span>
+          </a>
+        </li>
+      ))}
+    </ol>
+    <div class="panels" id={`panel-${scene.id}`} data-panels tabindex="-1" aria-live="polite">
+      {scene.points.map((p, i) => {
+        const link = primaryLink(p.pub);
+        return (
+          <article class="panel" data-pt={p.id} hidden={p.id !== def.id} aria-label={`Featured paper: ${p.label}`}>
+            <p class="panel__eyebrow">{p.label} · featured paper {i + 1} of 4</p>
+            <h3 class="panel__title">{p.pub.title}</h3>
+            <p class="panel__meta">{meta(p.pub)}</p>
+            {p.pub.why && <p class="panel__why">{p.pub.why}</p>}
+            <div class="panel__more">
+              <p class="panel__authors"><span class="label">Credited authors</span> {p.pub.authors.join(', ')} <span class="muted">({p.pub.authorsSource})</span></p>
+              <p class="muted">{verificationText[p.pub.verification]}{p.pub.note ? ` ${p.pub.note}` : ''}</p>
+            </div>
+            <p class="panel__links">
+              {link && <a class="btn btn--sm" href={link.href} target="_blank" rel="noopener noreferrer">Open {link.label}<span class="sr"> (opens in a new tab)</span></a>}
+              <a href={`#pub-${p.id}`}>View in bibliography</a>
+              <a href={`#featured-${p.id}`} data-share>Link to this selection</a>
+              <button type="button" class="panel__close" hidden>Close details</button>
+            </p>
+          </article>
+        );
+      })}
+    </div>
+  </div>
+</section>

@@ -1,0 +1,662 @@
+[
+ {
+  "id": "a1",
+  "tags": [
+   "cloud-privacy",
+   "ai-ml"
+  ],
+  "note": "Repository record. The year is the issue date the depositor declared (2024-11-26); the Zenodo record itself was created in July 2026. A journal version of record has not been matched, so no journal is named here.",
+  "title": "An Intelligent Cybersecurity Framework for Data Protection in Cloud Computing Environments",
+  "year": 2024,
+  "venue": "Zenodo (repository record)",
+  "workType": "Repository record",
+  "authors": [
+   "Partha Chakraborty",
+   "Hemayet Uddin Himel",
+   "Monjira Bashir",
+   "Mohammad Somon Sikder",
+   "Harleen Kaur",
+   "Md Talha Bin Ansar",
+   "Jobanpreet kaur",
+   "Md Kazi Tuhin"
+  ],
+  "authorsSource": "DataCite record",
+  "doi": "10.5281/zenodo.21538159",
+  "sourceName": "DataCite / Zenodo",
+  "verification": "datacite",
+  "altVersions": [
+   {
+    "label": "Zenodo concept record (all versions)",
+    "doi": "10.5281/zenodo.21538158"
+   }
+  ],
+  "featuredLabel": "Cloud data protection",
+  "why": "The glass enclosure around the sandbox reads as a protected cloud environment; this record concerns data protection in cloud computing."
+ },
+ {
+  "id": "a2",
+  "tags": [
+   "threat-intel",
+   "ai-ml"
+  ],
+  "note": "",
+  "title": "Cyber Threat Prediction Using Temporal Data Analysis Model",
+  "year": 2026,
+  "venue": "2026 6th International Conference on Intelligent Technologies (CONIT)",
+  "workType": "Conference paper",
+  "authors": [
+   "Partha Chakraborty"
+  ],
+  "authorsSource": "Publisher record (Crossref)",
+  "doi": "10.1109/conit69683.2026.11620680",
+  "sourceName": "Publisher record via Crossref",
+  "verification": "crossref",
+  "altVersions": [],
+  "featuredLabel": "Threat prediction",
+  "why": "The blue stream leaving the robot's hand reads as data in motion; this paper is about predicting cyber threats from temporal data."
+ },
+ {
+  "id": "a3",
+  "tags": [
+   "threat-intel",
+   "ai-ml"
+  ],
+  "note": "",
+  "title": "AI-driven threat detection and response framework for protecting U.S. critical infrastructure from cyberattacks",
+  "year": 2026,
+  "venue": "International Cybersecurity Law Review",
+  "workType": "Journal article",
+  "authors": [
+   "Niropam Das",
+   "Harleen Kaur",
+   "Kazi Bushra Siddiqa",
+   "Syed Nazmul Hasan",
+   "Partha Chakraborty",
+   "Jobanpreet kaur",
+   "Habiba Rahman",
+   "Ahmed Shan-A-Alahi",
+   "Rakibul Hasan"
+  ],
+  "authorsSource": "Publisher record (Crossref)",
+  "doi": "10.1365/s43439-026-00169-5",
+  "sourceName": "Publisher record via Crossref",
+  "verification": "crossref",
+  "altVersions": [],
+  "featuredLabel": "Infrastructure defense",
+  "why": "The server racks stand for critical infrastructure; this paper concerns AI-driven threat detection and response for U.S. critical infrastructure."
+ },
+ {
+  "id": "a4",
+  "tags": [
+   "cloud-privacy",
+   "ai-ml"
+  ],
+  "note": "",
+  "title": "Trustworthy Data Lakehouse Design Using Federated Learning and Blockchain",
+  "year": 2025,
+  "venue": "2025 1st International Conference on Advancement in Futuristic Technologies (ICAFT)",
+  "workType": "Conference paper",
+  "authors": [
+   "Partha Chakraborty",
+   "Md Alamgir Miah",
+   "Md Abubokor Siam",
+   "Hasan Imam",
+   "Kazi Bushra Siddiqa",
+   "Habiba Rahman",
+   "Clinton Ronjon Barikdar"
+  ],
+  "authorsSource": "Publisher record (Crossref)",
+  "doi": "10.1109/icaft66710.2025.11453041",
+  "sourceName": "Publisher record via Crossref",
+  "verification": "crossref",
+  "altVersions": [],
+  "featuredLabel": "Trusted data",
+  "why": "The database cylinder reads as a data store; this paper concerns trustworthy data lakehouse design using federated learning and blockchain."
+ },
+ {
+  "id": "b1",
+  "tags": [
+   "threat-intel",
+   "ai-ml"
+  ],
+  "note": "",
+  "title": "AI-Augmented Security Analytics for Real-Time Threat Identification",
+  "year": 2026,
+  "venue": "2026 6th International Conference on Intelligent Technologies (CONIT)",
+  "workType": "Conference paper",
+  "authors": [
+   "Md Kazi Tuhin",
+   "Harleen Kaur",
+   "Hasan Imam",
+   "Ashrafa Hossain",
+   "Ahmed Shan-A-Alahi",
+   "Partha Chakraborty"
+  ],
+  "authorsSource": "Publisher record (Crossref)",
+  "doi": "10.1109/conit69683.2026.11621644",
+  "sourceName": "Publisher record via Crossref",
+  "verification": "crossref",
+  "altVersions": [],
+  "featuredLabel": "Security analytics",
+  "why": "The fingertip meeting the shield is the point of detection; this paper concerns AI-augmented security analytics for real-time threat identification."
+ },
+ {
+  "id": "b2",
+  "tags": [
+   "cloud-privacy",
+   "network-edge",
+   "ai-ml"
+  ],
+  "note": "Chapter in the Fifth International Conference on Computing and Communication Networks proceedings (parent volume DOI 10.1007/978-3-032-14197-2). The parent volume is not listed as a separate work.",
+  "title": "A Privacy-Preserving Federated Intrusion Detection System Leveraging Secure Multi-Party Computation Across Collaborative Cloud Tenants",
+  "year": 2026,
+  "venue": "Lecture Notes in Networks and Systems · Proceedings of the Fifth International Conference on Computing and Communication Networks",
+  "workType": "Book chapter",
+  "authors": [
+   "Niropam Das",
+   "Partha Chakraborty",
+   "Mohammad Abdul Goffer",
+   "Harleen Kaur",
+   "Md Kazi Tuhin",
+   "Ahmed Shan-A-Alahi",
+   "Urmi Haldar"
+  ],
+  "authorsSource": "Publisher record (Crossref)",
+  "doi": "10.1007/978-3-032-14197-2_42",
+  "sourceName": "Publisher record via Crossref",
+  "verification": "crossref",
+  "altVersions": [],
+  "featuredLabel": "Collaborative cloud",
+  "why": "The cloud icon stands for shared cloud infrastructure; this chapter concerns federated intrusion detection across collaborative cloud tenants."
+ },
+ {
+  "id": "b3",
+  "tags": [
+   "network-edge",
+   "ai-ml"
+  ],
+  "note": "",
+  "title": "Attention-guided quantum-inspired extreme learning machine with grey wolf optimization for rare-attack detection in IIoT networks",
+  "year": 2026,
+  "venue": "Discover Artificial Intelligence",
+  "workType": "Journal article",
+  "authors": [
+   "Md Shahiduzzaman",
+   "Md Sultanul Arefin Sourav",
+   "Maria Kabtia",
+   "Ramisa Samin Shammah",
+   "Md Azharul Islam",
+   "Partha Chakraborty",
+   "MD Mizanur Rahman",
+   "Mazharul Islam",
+   "Rahat Bin Aziz Tonoy",
+   "Mohammed Adnan"
+  ],
+  "authorsSource": "Publisher record (Crossref)",
+  "doi": "10.1007/s44163-026-01704-3",
+  "sourceName": "Publisher record via Crossref",
+  "verification": "crossref",
+  "altVersions": [],
+  "featuredLabel": "Industrial networks",
+  "why": "The connected node cluster reads as an industrial network; this paper concerns rare-attack detection in IIoT networks."
+ },
+ {
+  "id": "b4",
+  "tags": [
+   "network-edge",
+   "ai-ml"
+  ],
+  "note": "",
+  "title": "Secured and Standardized Intelligent Zero-Touch 6G Framework for Edge-AI Applications",
+  "year": 2026,
+  "venue": "IEEE Communications Standards Magazine",
+  "workType": "Journal article",
+  "authors": [
+   "Md Rayhan Hassan Mahin",
+   "Partha Chakraborty",
+   "Niropam Das",
+   "Harleen Kaur",
+   "Hemayet Uddin Himel",
+   "Jobanpreet Kaur",
+   "Ambarish G. Mohapatra"
+  ],
+  "authorsSource": "Publisher record (Crossref)",
+  "doi": "10.1109/MCOMSTD.2026.3660159",
+  "sourceName": "Publisher record via Crossref",
+  "verification": "crossref",
+  "altVersions": [],
+  "featuredLabel": "Edge AI and 6G",
+  "why": "The upper network node reads as the network edge; this paper concerns a secured, standardized zero-touch 6G framework for Edge-AI."
+ },
+ {
+  "id": "c1",
+  "tags": [
+   "is-governance"
+  ],
+  "note": "",
+  "title": "Resilient MIS Design Using Cryptographic and Cyber-Security Techniques",
+  "year": 2026,
+  "venue": "Lecture Notes in Networks and Systems",
+  "workType": "Book chapter",
+  "authors": [
+   "Md Talha Bin Ansar",
+   "Mohammad Somon Sikder",
+   "Md Kazi Tuhin",
+   "Niropam Das",
+   "Partha Chakraborty",
+   "Habiba Rahman"
+  ],
+  "authorsSource": "Publisher record (Crossref)",
+  "doi": "10.1007/978-3-032-30008-9_24",
+  "sourceName": "Publisher record via Crossref",
+  "verification": "crossref",
+  "altVersions": [],
+  "featuredLabel": "Cyber resilience",
+  "why": "The central padlock stands for cryptographic protection; this chapter concerns resilient management information system design using cryptographic and cyber-security techniques."
+ },
+ {
+  "id": "c2",
+  "tags": [
+   "threat-intel",
+   "is-governance",
+   "ai-ml"
+  ],
+  "note": "",
+  "title": "AI-Driven Cyber Threat Intelligence as a Management Information System: Integrating Cybersecurity Governance and IT Project Management for Organizational Resilience",
+  "year": 2023,
+  "venue": "The Eastasouth Journal of Information System and Computer Science",
+  "workType": "Journal article",
+  "authors": [
+   "Shuchona Malek Orthi",
+   "Partha Chakraborty",
+   "Md Abubokor Siam",
+   "Ahmed Shan-A-Alahi",
+   "Abdullah Al Zaiem",
+   "Syed Nazmul Hasan",
+   "Jobanpreet Kaur",
+   "Foysal Mahmud",
+   "Mohammad Abdul Goffer"
+  ],
+  "authorsSource": "Publisher record (Crossref)",
+  "doi": "10.58812/esiscs.v1i02.873",
+  "sourceName": "Publisher record via Crossref",
+  "verification": "crossref",
+  "altVersions": [],
+  "featuredLabel": "Threat intelligence",
+  "why": "The left AI cloud stands for machine-derived intelligence; this paper links cyber threat intelligence with governance and IT project management."
+ },
+ {
+  "id": "c3",
+  "tags": [
+   "ai-ml",
+   "is-governance"
+  ],
+  "note": "",
+  "title": "Toward Autonomous Decision Intelligence: Integrating Explainable AI and Scalable DSS Architectures in Modern Management Information Systems",
+  "year": 2024,
+  "venue": "Journal of Information Systems Engineering and Management",
+  "workType": "Journal article",
+  "authors": [
+   "Partha Chakraborty"
+  ],
+  "authorsSource": "Publisher record (Crossref)",
+  "doi": "10.52783/jisem.v9i4s.14591",
+  "sourceName": "Publisher record via Crossref",
+  "verification": "crossref",
+  "altVersions": [],
+  "featuredLabel": "Explainable decisions",
+  "why": "The right AI cloud stands for model-supported decisions; this paper concerns explainable AI and scalable decision support architectures."
+ },
+ {
+  "id": "c4",
+  "tags": [
+   "is-governance"
+  ],
+  "note": "",
+  "title": "Blockchain Integration in Management Information Systems a Decentralized Approach to Strengthening Cybersecurity and Data Integrity",
+  "year": 2025,
+  "venue": "2025 5th International Conference on Electrical, Computer and Energy Technologies (ICECET)",
+  "workType": "Conference paper",
+  "authors": [
+   "Jahid Hassan",
+   "Clinton Ronjon Barikdar",
+   "Syed Nazmul Hasan",
+   "Jobanpreet Kaur",
+   "Partha Chakraborty",
+   "Md Alamgir Miah",
+   "Mohammad Abdul Goffer"
+  ],
+  "authorsSource": "Publisher record (Crossref)",
+  "doi": "10.1109/icecet63943.2025.11472020",
+  "sourceName": "Publisher record via Crossref",
+  "verification": "crossref",
+  "altVersions": [],
+  "featuredLabel": "Data integrity",
+  "why": "The circuit junction reads as a point where records are joined and checked; this paper concerns blockchain in management information systems for data integrity."
+ },
+ {
+  "id": "catboost",
+  "tags": [
+   "ai-ml",
+   "interdisciplinary"
+  ],
+  "note": "Single credited author in the publisher record.",
+  "title": "CatBoost-Stacked Heterogeneous Deep Ensembles for Explainable Multi-Class Brain Tumor MRI Classification",
+  "year": 2026,
+  "venue": "Journal of Medical and Health Studies",
+  "workType": "Journal article",
+  "authors": [
+   "Partha Chakraborty"
+  ],
+  "authorsSource": "Publisher record (Crossref)",
+  "doi": "10.32996/jmhs.2026.7.5.4",
+  "sourceName": "Publisher record via Crossref",
+  "verification": "crossref",
+  "altVersions": []
+ },
+ {
+  "id": "ecet-threat",
+  "tags": [
+   "threat-intel",
+   "ai-ml",
+   "is-governance"
+  ],
+  "note": "",
+  "title": "AI-enhanced Cyber Threat Detection: Transforming Security Frameworks in Management Information Systems",
+  "year": 2025,
+  "venue": "2025 5th International Conference on Electrical, Computer and Energy Technologies (ICECET)",
+  "workType": "Conference paper",
+  "authors": [
+   "Niropam Das",
+   "Jahid Hassan",
+   "Partha Chakraborty",
+   "Jobanpreet Kaur",
+   "Syed Nazmul Hasan",
+   "Mohammad Abdul Goffer",
+   "Md Salah Uddin"
+  ],
+  "authorsSource": "Publisher record (Crossref)",
+  "doi": "10.1109/icecet63943.2025.11472511",
+  "sourceName": "Publisher record via Crossref",
+  "verification": "crossref",
+  "altVersions": []
+ },
+ {
+  "id": "cloud-mis",
+  "tags": [
+   "cloud-privacy",
+   "is-governance"
+  ],
+  "note": "",
+  "title": "The Role of Cloud-Based Management Information Systems in Enhancing IT Project Governance and Stakeholder Collaboration",
+  "year": 2025,
+  "venue": "Lecture Notes in Networks and Systems",
+  "workType": "Book chapter",
+  "authors": [
+   "Foysal Mahmud",
+   "Mohammad Abdul Goffer",
+   "Habiba Rahman",
+   "Partha Chakraborty",
+   "Niropam Das",
+   "Shuchona Malek Orthi",
+   "Gazi Touhidul Alam"
+  ],
+  "authorsSource": "Publisher record (Crossref)",
+  "doi": "10.1007/978-3-032-05548-4_1",
+  "sourceName": "Publisher record via Crossref",
+  "verification": "crossref",
+  "altVersions": []
+ },
+ {
+  "id": "fraud-health",
+  "tags": [
+   "ai-ml",
+   "interdisciplinary"
+  ],
+  "note": "",
+  "title": "AI-Driven Fraud Detection and Cybersecurity Framework for Protecting U.S. Healthcare Systems Against Emerging Cyber Threats",
+  "year": 2022,
+  "venue": "Computer Fraud and Security",
+  "workType": "Journal article",
+  "authors": [
+   "Partha Chakraborty"
+  ],
+  "authorsSource": "Publisher record (Crossref)",
+  "doi": "10.52710/cfs.1138",
+  "sourceName": "Publisher record via Crossref",
+  "verification": "crossref",
+  "altVersions": []
+ },
+ {
+  "id": "natsec",
+  "tags": [
+   "threat-intel",
+   "ai-ml"
+  ],
+  "note": "",
+  "title": "AI-Enhanced Cyber Threat Detection and Response Advancing National Security in Critical Infrastructure",
+  "year": 2025,
+  "venue": "Journal of Posthumanism",
+  "workType": "Journal article",
+  "authors": [
+   "Mohammad Abdul Goffer",
+   "Md Salah Uddin",
+   "Jobanpreet Kaur",
+   "Syed Nazmul Hasan",
+   "Clinton Ronjon Barikdar",
+   "Jahid Hassan",
+   "Niropam Das",
+   "Partha Chakraborty",
+   "Rakibul Hasan"
+  ],
+  "authorsSource": "Publisher record (Crossref)",
+  "doi": "10.63332/joph.v5i3.965",
+  "sourceName": "Publisher record via Crossref",
+  "verification": "crossref",
+  "altVersions": []
+ },
+ {
+  "id": "workforce",
+  "tags": [
+   "ai-ml",
+   "interdisciplinary"
+  ],
+  "note": "",
+  "title": "AI-Powered Workforce Analytics Forecasting Labor Market Trends and Skill Gaps for U.S. Economic Competitiveness",
+  "year": 2024,
+  "venue": "Journal of Computer Science and Technology Studies",
+  "workType": "Journal article",
+  "authors": [
+   "Foysal Mahmud",
+   "Mohammad Abdul Goffer",
+   "Partha Chakraborty",
+   "Sharmin Sultana",
+   "Evha Rozario",
+   "Md Alamgir Miah",
+   "Md Asikur Rahman Chy",
+   "Urmi Haldar"
+  ],
+  "authorsSource": "Publisher record (Crossref)",
+  "doi": "10.32996/jcsts.2024.6.5.21",
+  "sourceName": "Publisher record via Crossref",
+  "verification": "crossref",
+  "altVersions": []
+ },
+ {
+  "id": "bizanalytics",
+  "tags": [
+   "ai-ml",
+   "interdisciplinary",
+   "is-governance"
+  ],
+  "note": "",
+  "title": "AI-Driven Business Analytics for Economic Growth Leveraging Machine Learning and MIS for Data-Driven Decision-Making in the U.S. Economy",
+  "year": 2025,
+  "venue": "Journal of Posthumanism",
+  "workType": "Journal article",
+  "authors": [
+   "Urmi Haldar",
+   "Gazi Touhidul Alam",
+   "Habiba Rahman",
+   "Md Alamgir Miah",
+   "Partha Chakraborty",
+   "Abu Saleh Muhammad Saimon",
+   "Md Asikur Rahman Chy",
+   "Kazi Bushra Siddiqa",
+   "Mia Md Tofayel Gonee Manik"
+  ],
+  "authorsSource": "Publisher record (Crossref)",
+  "doi": "10.63332/joph.v5i4.1178",
+  "sourceName": "Publisher record via Crossref",
+  "verification": "crossref",
+  "altVersions": []
+ },
+ {
+  "id": "energy-mis",
+  "tags": [
+   "is-governance",
+   "interdisciplinary"
+  ],
+  "note": "",
+  "title": "Implementing MIS Solutions to Support the National Energy Dominance Strategy",
+  "year": 2025,
+  "venue": "Journal of Posthumanism",
+  "workType": "Journal article",
+  "authors": [
+   "Jahid Hassan",
+   "Habiba Rahman",
+   "Urmi Haldar",
+   "Sharmin Sultana",
+   "Md Mohibur Rahman",
+   "Partha Chakraborty",
+   "Niropam Das",
+   "Clinton Ronjon Barikdar"
+  ],
+  "authorsSource": "Publisher record (Crossref)",
+  "doi": "10.63332/joph.v5i5.1908",
+  "sourceName": "Publisher record via Crossref",
+  "verification": "crossref",
+  "altVersions": []
+ },
+ {
+  "id": "litmining",
+  "tags": [
+   "ai-ml",
+   "interdisciplinary"
+  ],
+  "note": "",
+  "title": "Hybrid Big Data-LLM Framework for Intelligent Scientific Literature Mining",
+  "year": 2026,
+  "venue": "2026 IEEE International Conference for Convergence in Computing Technology (I3CTCON)",
+  "workType": "Conference paper",
+  "authors": [
+   "Md. Ishtiaque Alam",
+   "Ruhul Amin Md Rashed",
+   "Partha Chakraborty",
+   "Sraboni Clara Mohonta",
+   "Hasan Imam",
+   "Mohammad Muzahidur Rahman Bhuiyan"
+  ],
+  "authorsSource": "Publisher record (Crossref)",
+  "doi": "10.1109/i3ctcon68242.2026.11507315",
+  "sourceName": "Publisher record via Crossref",
+  "verification": "crossref",
+  "altVersions": []
+ },
+ {
+  "id": "bizdecision",
+  "tags": [
+   "ai-ml",
+   "interdisciplinary"
+  ],
+  "note": "",
+  "title": "Leveraging Artificial Intelligence and Machine Learning for Decision-Making in Business Management: A Comprehensive Analysis",
+  "year": 2025,
+  "venue": "Journal of Management World",
+  "workType": "Journal article",
+  "authors": [
+   "Partha Chakraborty",
+   "Kazi Bushra Siddiqa",
+   "Habiba Rahman",
+   "Md Alamgir Miah",
+   "Niropam Das",
+   "Mohammad Abdul Goffer",
+   "Sachin Das"
+  ],
+  "authorsSource": "Publisher record (Crossref)",
+  "doi": "10.53935/jomw.v2024i4.867",
+  "sourceName": "Publisher record via Crossref",
+  "verification": "crossref",
+  "altVersions": []
+ },
+ {
+  "id": "grounding",
+  "tags": [
+   "ai-ml",
+   "interdisciplinary"
+  ],
+  "note": "",
+  "title": "Grounding language models with deterministic verifiers for fraud detection",
+  "year": 2026,
+  "venue": "Discover Artificial Intelligence",
+  "workType": "Journal article",
+  "authors": [
+   "Md Sultanul Arefin Sourav",
+   "Evha Rozario",
+   "Md Ashiqul Islam",
+   "Kaniz Sultana Chy",
+   "Samia Akter",
+   "Md Shahiduzzaman",
+   "Mohammad Sazzad Hossain",
+   "Maria Kabtia",
+   "Partha Chakraborty",
+   "Abdul Basit"
+  ],
+  "authorsSource": "Publisher record (Crossref)",
+  "doi": "10.1007/s44163-026-02355-0",
+  "sourceName": "Publisher record via Crossref",
+  "verification": "crossref",
+  "altVersions": []
+ },
+ {
+  "id": "insider",
+  "tags": [
+   "threat-intel",
+   "network-edge"
+  ],
+  "note": "",
+  "title": "Insider Threats and Information Security Risks in Modern Enterprise Network Environments",
+  "year": 2021,
+  "venue": "Computer Fraud and Security",
+  "workType": "Journal article",
+  "authors": [
+   "Partha Chakraborty"
+  ],
+  "authorsSource": "Publisher record (Crossref)",
+  "doi": "10.52710/cfs.1137",
+  "sourceName": "Publisher record via Crossref",
+  "verification": "crossref",
+  "altVersions": []
+ },
+ {
+  "id": "risk-mitigation",
+  "title": "The Impact of Artificial Intelligence on Risk Mitigation in IT Project Management: A Management Information Systems Approach",
+  "year": 2024,
+  "venue": "Power System Protection and Control",
+  "workType": "Journal article",
+  "authors": [
+   "Partha Chakraborty"
+  ],
+  "authorsSource": "ORCID record (owner-supplied)",
+  "doi": "",
+  "sourceName": "ORCID record (owner-supplied); no DOI or publisher record matched",
+  "verification": "orcid-only",
+  "sourceUrl": "https://orcid.org/0009-0006-3203-8902",
+  "tags": [
+   "ai-ml",
+   "is-governance"
+  ],
+  "altVersions": [],
+  "note": "Metadata is taken from the supplied ORCID record only."
+ }
+]
