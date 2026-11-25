@@ -354,46 +354,31 @@ test.describe('bibliography', () => {
 });
 
 test.describe('motion and resilience', () => {
-  test.describe('reduced motion', () => {
+  test.describe('reduced-motion preference is ignored by design', () => {
     test.use({ reducedMotion: 'reduce' });
-    test('starts with motion off, keeps selection and a static trace, and the toggle persists', async ({ page, isMobile }) => {
+    test('motion stays on, there is no toggle, and the scene keeps rendering frames', async ({ page, isMobile }) => {
       test.skip(isMobile, 'desktop');
+      await page.addInitScript(() => localStorage.setItem('motion', 'off'));
       await page.goto('/');
-      await expect(page.locator('html')).toHaveAttribute('data-motion', 'off');
-      const toggle = page.getByRole('button', { name: /Motion/ });
-      await expect(toggle).toHaveAttribute('aria-pressed', 'false');
-      const hs = hotspot(page, 'a2');
-      await hs.scrollIntoViewIfNeeded();
-      await hs.click();
-      await expect(page.locator('g.trace[data-pt="a2"]')).toHaveClass(/is-active/);
-      expect(await page.locator('#scene-a .trace[data-pt="a2"] .trace__line').evaluate((e) => getComputedStyle(e).opacity)).toBe('0.95');
-      const anim = await page.locator('#scene-a .trace--ambient .trace__pulse').evaluate((e) => getComputedStyle(e).animationName);
-      expect(anim).toBe('none');
+      await expect(page.locator('html')).toHaveAttribute('data-motion', 'on');
+      await expect(page.getByRole('button', { name: /Motion/ })).toHaveCount(0);
       const stage = page.locator('#scene-a [data-stage]');
+      await stage.scrollIntoViewIfNeeded();
       await expect(stage).toHaveAttribute('data-gl', 'ready', { timeout: 20000 });
-      const f1 = await stage.getAttribute('data-frames');
+      const f1 = Number(await stage.getAttribute('data-frames'));
       await page.waitForTimeout(1200);
-      expect(await stage.getAttribute('data-frames')).toBe(f1);
-      await toggle.click();
-      await expect(page.locator('html')).toHaveAttribute('data-motion', 'on');
-      await page.reload();
-      await expect(page.locator('html')).toHaveAttribute('data-motion', 'on');
+      expect(Number(await stage.getAttribute('data-frames'))).toBeGreaterThan(f1);
+      const anim = await page.locator('#scene-a .trace--ambient .trace__pulse').evaluate((e) => getComputedStyle(e).animationName);
+      expect(anim).not.toBe('none');
     });
   });
 
-  test('motion toggle turns motion off, stops tilt, and is remembered', async ({ page, isMobile }) => {
-    test.skip(isMobile, 'desktop');
+  test('motion is on by default with no toggle and survives reload', async ({ page }) => {
     await page.goto('/');
     await expect(page.locator('html')).toHaveAttribute('data-motion', 'on');
-    await page.getByRole('button', { name: /Motion/ }).click();
-    await expect(page.locator('html')).toHaveAttribute('data-motion', 'off');
-    const box = (await page.locator('#scene-a [data-stage]').boundingBox())!;
-    await page.mouse.move(box.x + box.width - 5, box.y + 5, { steps: 6 });
-    await page.waitForTimeout(400);
-    expect(await page.locator('#scene-a [data-plane]').evaluate((e) => getComputedStyle(e).transform)).toBe('none');
-    expect(Math.abs(Number((await page.locator('#scene-a [data-stage]').getAttribute('data-yaw')) ?? 0))).toBeLessThan(0.005);
+    await expect(page.getByRole('button', { name: /Motion/ })).toHaveCount(0);
     await page.reload();
-    await expect(page.locator('html')).toHaveAttribute('data-motion', 'off');
+    await expect(page.locator('html')).toHaveAttribute('data-motion', 'on');
   });
 
   test('offscreen scenes are paused', async ({ page }) => {

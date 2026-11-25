@@ -46,10 +46,9 @@ const ld = {
         var d = document.documentElement;
         d.classList.remove('no-js');
         d.classList.add('js');
-        var m = null;
-        try { m = localStorage.getItem('motion'); } catch (e) {}
-        var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
-        d.setAttribute('data-motion', m === 'on' || m === 'off' ? m : reduce ? 'off' : 'on');
+        // Motion is permanently on by design: no toggle, no stored preference, no reduced-motion opt-out.
+        try { localStorage.removeItem('motion'); } catch (e) {}
+        d.setAttribute('data-motion', 'on');
       })();
     </script>
     <script type="application/ld+json" set:html={JSON.stringify(ld).replace(/</g, '\\u003c')} />

@@ -17,7 +17,7 @@ const TRACE_SHIFT_PX = 3;
 const COMPACT_BELOW_PX = 480;
 const EASE = 0.14;
 
-const motionOn = (): boolean => document.documentElement.getAttribute('data-motion') !== 'off';
+const motionOn = (): boolean => true; // permanent by design
 const qs = <T extends Element>(root: ParentNode, sel: string): T[] => Array.from(root.querySelectorAll<T>(sel));
 
 export interface SceneApi {

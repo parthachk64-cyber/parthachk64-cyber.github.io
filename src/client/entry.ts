@@ -2,25 +2,12 @@ import { initScene, type SceneApi } from './scenes';
 import { initBibliography } from './bibliography';
 
 function initMotion(): void {
-  const btn = document.querySelector<HTMLButtonElement>('[data-motion-toggle]');
-  const label = document.querySelector<HTMLElement>('[data-motion-state]');
+  // Motion is permanently on. Only a hidden tab pauses ambient animation, to save battery.
   const root = document.documentElement;
-  const paint = (): void => {
-    const on = root.getAttribute('data-motion') !== 'off';
-    btn?.setAttribute('aria-pressed', String(on));
-    if (label) label.textContent = on ? 'on' : 'off';
-  };
-  btn?.addEventListener('click', () => {
-    const next = root.getAttribute('data-motion') === 'off' ? 'on' : 'off';
-    root.setAttribute('data-motion', next);
-    try { localStorage.setItem('motion', next); } catch { /* storage unavailable: choice lasts for this visit */ }
-    paint();
-    window.dispatchEvent(new Event('motionchange'));
-  });
+  root.setAttribute('data-motion', 'on');
   document.addEventListener('visibilitychange', () => {
     if (document.hidden) root.setAttribute('data-hidden', ''); else root.removeAttribute('data-hidden');
   });
-  paint();
 }
 
 function initMenu(): void {

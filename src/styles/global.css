@@ -230,11 +230,5 @@ p { margin: 0 0 1rem; }
 .foot { border-top: 1px solid var(--rule); padding-block: 2rem; color: var(--muted); font-size: 0.9rem; }
 @media (max-width: 799px) { .about__grid { grid-template-columns: 1fr; } }
 
-/* Motion control */
-:root[data-motion='off'] .scene *, :root[data-motion='off'] .scene *::before { animation: none !important; transition: none !important; }
-:root[data-motion='off'] .plane, :root[data-motion='off'] .traces, :root[data-motion='off'] .hotspots, :root[data-motion='off'] .light { transform: none !important; }
+/* Motion is permanently on. Offscreen scenes and hidden tabs still pause to save power. */
 :root[data-hidden] .scene *, .scene:not(.is-visible) * { animation-play-state: paused !important; }
-@media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
-  :root:not([data-motion='on']) .scene * { animation: none !important; transition: none !important; }
-}
